@@ -37,7 +37,7 @@ const App = () => {
         }
       
         fetchPokemonDetails();
-      }, [index]);
+      }, [index, pokemonList]);
 
   return (
     <div className='flex justify-center items-center h-screen'>
