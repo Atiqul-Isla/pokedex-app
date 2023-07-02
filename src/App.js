@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
 import './App.css'
 import {getPokemonList, getPokemonDescription, getPokemonSpriteUrl} from './utils'
 // counter
@@ -8,8 +7,6 @@ const App = () => {
 
     const [pokemonList, setPokemonList] = useState([]);
     const [index, setIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [pokemonDescription, setPokemonDescription] = useState('');
     const [pokemonSpriteUrl, setPokemonSpriteUrl] = useState('');
   
@@ -17,12 +14,10 @@ const App = () => {
       async function fetchData() {
         try {
           const list = await getPokemonList();
-          console.log(list); // Add this line to check the contents of the pokemonList array
+          console.log(list); 
           setPokemonList(list);
-          setLoading(false);
         } catch (error) {
-          setError(error);
-          setLoading(false);
+          console.log(error)
         }
       }
   
