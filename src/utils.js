@@ -19,8 +19,21 @@ export async function getPokemonList() {
 
   export async function getPokemonDescription(name) {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
-    const data = await response.json();
-    return data.flavor_text_entries[0].flavor_text.replace(/[\n\f]/g, " ");
+    const array = await response.json();
+    let englishText = "";
+  
+    for (let i = 0; i < array.flavor_text_entries.length; i++) {
+      if (array.flavor_text_entries[i].language.name === "en") {
+        englishText = array.flavor_text_entries[i].flavor_text.replace(
+          /[\n\f]/g,
+          " "
+        );
+        break;
+      } else {
+        continue;
+      }
+    }
+    return englishText;
   }
   
   export function getPokemonSpriteUrl(name) {
