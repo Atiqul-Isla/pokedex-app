@@ -9,40 +9,52 @@ const App = () => {
     const [index, setIndex] = useState(0);
     const [pokemonDescription, setPokemonDescription] = useState('');
     const [pokemonSpriteUrl, setPokemonSpriteUrl] = useState('');
+    const [generation, setGeneration] = useState(1) 
+    const [currentPokemon, setCurrentPokemon] = useState(null);
+
   
     useEffect(() => {
       async function fetchData() {
         try {
-          const list = await getPokemonList();
-          console.log(list); 
+          const list = await getPokemonList(generation);
           setPokemonList(list);
+          setCurrentPokemon(list[0]);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
   
       fetchData();
-    }, []);
+    }, [generation]);
 
     useEffect(() => {
-        async function fetchPokemonDetails() {
-          try {
-            const description = await getPokemonDescription(pokemonList[index]?.name);
-            const spriteUrl = getPokemonSpriteUrl(index+1);
-            setPokemonDescription(description);
-            setPokemonSpriteUrl(spriteUrl);
-          } catch (error) {
-            console.error(error);
-          }
+      async function fetchPokemonDetails() {
+        try {
+          const selectedPokemon = pokemonList[index];
+          const description = await getPokemonDescription(selectedPokemon?.id);
+          const spriteUrl = getPokemonSpriteUrl(selectedPokemon?.id);
+          setPokemonDescription(description);
+          setPokemonSpriteUrl(spriteUrl);
+        } catch (error) {
+          console.error(error);
         }
-      
-        fetchPokemonDetails();
-      }, [index, pokemonList]);
+      }
+    
+      fetchPokemonDetails();
+    }, [index, pokemonList]);
 
   return (
     <div className='flex justify-center items-center h-screen'>
+       <div className='w-[200px] h-[65vh] bg-white rounded-3xl mx-3 flex flex-col justify-center items-center  shadow-black shadow-lg'>
+       <button className='bg-steel p-2 px-6 rounded-xl my-2' value={1} onClick={(e) => setGeneration(Number(e.target.value))}>Generation 1</button>
+       <button className='bg-steel p-2 px-6 rounded-xl my-2' value={2} onClick={(e) => setGeneration(Number(e.target.value))}>Generation 2</button>
+       <button className='bg-steel p-2 px-6 rounded-xl my-2' value={3} onClick={(e) => setGeneration(Number(e.target.value))}>Generation 3</button>
+
+       </div>
         <div className='w-[600px] h-[65vh] bg-white rounded-3xl shadow-lg shadow-black flex flex-col justify-center items-center gap-4'>
-                <select className='bg-purple-200 px-24 py-1 rounded-md' value={index} onChange={(e) => setIndex(Number(e.target.value))}>
+                <p>viewing generation: {generation}</p>
+                <select className='bg-purple-200 px-24 py-1 rounded-md' value={currentPokemon?.id} onChange={(e) => setCurrentPokemon(pokemonList.find(pokemon => pokemon.id === Number(e.target.value)))}>
+
                 {pokemonList.map((pokemon, idx) => (
                     <option key={idx} value={idx}>
                     {pokemon.name}
