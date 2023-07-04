@@ -1,7 +1,7 @@
 export async function getPokemonList(generation) {
   try {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=500`
+      `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1281`
     );
 
     if (!response.ok) {
@@ -15,15 +15,39 @@ export async function getPokemonList(generation) {
     switch (generation) {
       case 1:
         startIndex = 0;
-        endIndex = 150;
+        endIndex = 151;
         break;
       case 2:
         startIndex = 151;
-        endIndex = 250;
+        endIndex = 251;
         break;
       case 3:
         startIndex = 251;
         endIndex = 386;
+        break;
+      case 4:
+        startIndex = 386;
+        endIndex = 493;
+        break;
+      case 5:
+        startIndex = 493;
+        endIndex = 649;
+        break;
+      case 6:
+        startIndex = 649;
+        endIndex = 721;
+        break;
+      case 7:
+        startIndex = 721;
+        endIndex = 809;
+        break;
+      case 8:
+        startIndex = 809;
+        endIndex = 905;
+        break;
+      case 9:
+        startIndex = 905;
+        endIndex = 1008;
         break;
       default:
         startIndex = 0;
