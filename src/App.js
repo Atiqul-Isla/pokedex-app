@@ -5,43 +5,51 @@ import {getPokemonList, getPokemonDescription, getPokemonSpriteUrl} from './util
 
 const App = () => {
 
-    const [pokemonList, setPokemonList] = useState([]);
-    const [index, setIndex] = useState(0);
-    const [pokemonDescription, setPokemonDescription] = useState('');
-    const [pokemonSpriteUrl, setPokemonSpriteUrl] = useState('');
-    const [generation, setGeneration] = useState(1) 
-    const [currentPokemon, setCurrentPokemon] = useState(null);
+  const [pokemonList, setPokemonList] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [pokemonDescription, setPokemonDescription] = useState('');
+  const [pokemonSpriteUrl, setPokemonSpriteUrl] = useState('');
+  const [generation, setGeneration] = useState(1);
+  const [currentPokemon, setCurrentPokemon] = useState(null);
 
-  
-    useEffect(() => {
-      async function fetchData() {
-        try {
-          const list = await getPokemonList(generation);
-          setPokemonList(list);
-          setCurrentPokemon(list[0]);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-  
-      fetchData();
-    }, [generation]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const list = await getPokemonList(generation);
+        setPokemonList(list);
 
-    useEffect(() => {
-      async function fetchPokemonDetails() {
-        try {
-          const selectedPokemon = pokemonList[index];
-          const description = await getPokemonDescription(selectedPokemon?.name);
-          const spriteUrl = getPokemonSpriteUrl(selectedPokemon?.id);
-          setPokemonDescription(description);
-          setPokemonSpriteUrl(spriteUrl);
-        } catch (error) {
-          console.error(error);
-        }
+        // Ensure the index is within the bounds of the new Pokemon list
+        setIndex((prevIndex) => {
+          if (prevIndex >= list.length) {
+            return list.length - 1;
+          }
+          return prevIndex;
+        });
+
+        setCurrentPokemon(list[0]);
+      } catch (error) {
+        console.log(error);
       }
-    
-      fetchPokemonDetails();
-    }, [index, pokemonList]);
+    }
+
+    fetchData();
+  }, [generation]);
+
+  useEffect(() => {
+    async function fetchPokemonDetails() {
+      try {
+        const selectedPokemon = pokemonList[index];
+        const description = await getPokemonDescription(selectedPokemon?.name);
+        const spriteUrl = getPokemonSpriteUrl(selectedPokemon?.id);
+        setPokemonDescription(description);
+        setPokemonSpriteUrl(spriteUrl);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchPokemonDetails();
+  }, [index, pokemonList]);
 
   return (
     <div className='flex justify-center items-center h-screen'>
