@@ -27,12 +27,14 @@ const App = () => {
         });
 
         setCurrentPokemon(list[0]);
+        console.log(currentPokemon)
       } catch (error) {
         console.log(error);
       }
     }
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generation]);
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const App = () => {
                     </button>: <button className='bg-purple-200 px-12 py-2 rounded-md' onClick={() => setIndex(index-1)}>
                      Prev
                     </button>}
-                    {index == pokemonList.length - 1 ? <button className='bg-purple-100 px-12 py-2 rounded-md'>Next</button> : <button className='bg-purple-200 px-12 py-2 rounded-md' onClick={() => setIndex(index+1)}>
+                    {index === pokemonList.length - 1 ? <button className='bg-purple-100 px-12 py-2 rounded-md'>Next</button> : <button className='bg-purple-200 px-12 py-2 rounded-md' onClick={() => setIndex(index+1)}>
                         Next 
                     </button>}
                 </div>
